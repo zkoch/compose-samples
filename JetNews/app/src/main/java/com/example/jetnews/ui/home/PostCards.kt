@@ -38,6 +38,11 @@ import androidx.compose.runtime.Providers
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.hidden
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.jetnews.R
@@ -90,9 +95,17 @@ fun PostCardSimple(
     isFavorite: Boolean,
     onToggleFavorite: () -> Unit
 ) {
+    val bookmarkActionLabel =
+        stringResource(if (isFavorite) R.string.action_add_bookmark else R.string.action_remove_bookmark)
     Row(
         modifier = Modifier.clickable(onClick = { navigateTo(Screen.Article(post.id)) })
             .padding(16.dp)
+            .semantics(mergeDescendants = true) {
+                customActions = listOf(CustomAccessibilityAction(
+                    label = bookmarkActionLabel,
+                    action = { onToggleFavorite(); true }
+                ))
+            }
     ) {
         PostImage(post, Modifier.padding(end = 16.dp))
         Column(modifier = Modifier.weight(1f)) {
@@ -101,7 +114,8 @@ fun PostCardSimple(
         }
         BookmarkButton(
             isBookmarked = isFavorite,
-            onClick = onToggleFavorite
+            onClick = onToggleFavorite,
+            modifier = Modifier.semantics { hidden() }
         )
     }
 }

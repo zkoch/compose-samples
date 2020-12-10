@@ -16,4 +16,6 @@
     <string name="app_name">Jetnews</string>
     <string name="load_error">Can\'t update latest news</string>
     <string name="retry">Retry</string>
+    <string name="action_add_bookmark">Add to bookmarks</string>
+    <string name="action_remove_bookmark">Remove from bookmarks</string>
 </resources>
