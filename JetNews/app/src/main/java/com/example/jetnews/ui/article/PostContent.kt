@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
@@ -114,7 +115,7 @@ private fun PostHeaderImage(post: Post) {
 @Composable
 private fun PostMetadata(metadata: Metadata) {
     val typography = MaterialTheme.typography
-    Row {
+    Row(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         Image(
             imageVector = Icons.Filled.AccountCircle,
             modifier = Modifier.preferredSize(40.dp),
