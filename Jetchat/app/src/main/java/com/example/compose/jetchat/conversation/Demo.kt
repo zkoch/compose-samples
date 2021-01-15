@@ -18,6 +18,7 @@
 
 package com.example.compose.jetchat.conversation
 
+import androidx.compose.animation.animateAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,6 +28,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -37,12 +39,16 @@ fun Message(
     isUserMe: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val chatColor by animateAsState(
+        when {
+            isUserMe -> MaterialTheme.colors.surface
+            else -> MaterialTheme.colors.secondary
+        }
+    )
+
     Box(modifier) {
         Surface(
-            color = when {
-                isUserMe -> MaterialTheme.colors.surface
-                else -> MaterialTheme.colors.secondary
-            },
+            color = chatColor,
             shape = MaterialTheme.shapes.medium,
             elevation = 1.dp,
             modifier = Modifier
@@ -70,7 +76,8 @@ fun Messages(
             Message(
                 msg = message,
                 isUserMe = message.isMe,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 4.dp)
             )
         }
