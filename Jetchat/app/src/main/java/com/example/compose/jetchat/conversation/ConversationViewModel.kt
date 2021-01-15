@@ -17,11 +17,38 @@
 package com.example.compose.jetchat.conversation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.compose.jetchat.data.exampleUiState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class ConversationViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(exampleUiState)
     val uiState = _uiState.asStateFlow()
+
+    fun sendMessage(message: Message) {
+        addMessage(message)
+
+        viewModelScope.launch {
+            delay(2000)
+            addMessage(REPLY)
+        }
+    }
+
+    private fun addMessage(message: Message) {
+        val newMessages = ArrayList(_uiState.value.messages)
+        newMessages.add(0, message)
+        _uiState.tryEmit(_uiState.value.copy(messages = newMessages))
+    }
+
+    companion object {
+        private val REPLY = Message(
+            author = "Ali Connors",
+            isMe = false,
+            content = "Nice!",
+            timestamp = "Just now"
+        )
+    }
 }

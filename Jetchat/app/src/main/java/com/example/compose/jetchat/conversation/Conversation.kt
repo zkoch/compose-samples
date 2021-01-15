@@ -18,92 +18,42 @@ package com.example.compose.jetchat.conversation
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.AmbientContentAlpha
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Brush
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose.jetchat.R
 import com.example.compose.jetchat.components.JetchatAppBar
+import com.example.compose.jetchat.data.OverrideColor
 import com.example.compose.jetchat.data.exampleUiState
 import com.example.compose.jetchat.theme.JetchatTheme
-import dev.chrisbanes.accompanist.insets.navigationBarsWithImePadding
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
-
-/**
- * Entry point for a conversation screen.
- *
- * @param uiState [ConversationUiState] that contains messages to display
- * @param navigateToProfile User action when navigation to a profile is requested
- * @param modifier [Modifier] to apply to this layout node
- * @param onNavIconPressed Sends an event up when the user clicks on the menu
- */
-@Composable
-fun ConversationContent(
-    uiState: ConversationUiState,
-    modifier: Modifier = Modifier,
-    onNavIconPressed: () -> Unit = { }
-) {
-    val authorMe = stringResource(R.string.author_me)
-    val timeNow = stringResource(id = R.string.now)
-
-    val scrollState = rememberScrollState()
-    Surface(modifier = modifier) {
-        Column(Modifier.fillMaxSize()) {
-            // Channel name bar floats above the messages
-            ConversationAppBar(
-                title = uiState.contactName,
-                contactPhoto = uiState.contactPhoto ?: 0,
-                onNavIconPressed = onNavIconPressed,
-                // Use statusBarsPadding() to move the app bar content below the status bar
-                modifier = Modifier.statusBarsPadding(),
-            )
-
-            Messages(
-                messages = uiState.messages,
-                modifier = Modifier.weight(1f),
-            )
-
-            UserInput(
-                onMessageSent = { content ->
-                    uiState.addMessage(
-                        Message(authorMe, isMe = true, content, timeNow)
-                    )
-                },
-                scrollState = scrollState,
-                // Use navigationBarsWithImePadding(), to move the input panel above both the
-                // navigation bar, and on-screen keyboard (IME)
-                modifier = Modifier.navigationBarsWithImePadding(),
-            )
-        }
-    }
-}
 
 @Composable
 fun ConversationAppBar(
     title: String,
     @DrawableRes contactPhoto: Int,
-    modifier: Modifier = Modifier,
-    onNavIconPressed: () -> Unit = { }
+    onAccentColorSelected: (OverrideColor) -> Unit,
+    modifier: Modifier = Modifier
 ) {
+    val showMenu = remember { mutableStateOf(false) }
+
     JetchatAppBar(
         modifier = modifier,
-        onNavIconPressed = onNavIconPressed,
         iconDrawable = contactPhoto,
         title = {
             Text(
@@ -122,13 +72,32 @@ fun ConversationAppBar(
                         .preferredHeight(24.dp)
                 )
                 // Info icon
-                Icon(
-                    imageVector = Icons.Outlined.Info,
-                    modifier = Modifier
-                        .clickable(onClick = {}) // TODO: Show not implemented dialog.
-                        .padding(horizontal = 12.dp, vertical = 16.dp)
-                        .preferredHeight(24.dp)
-                )
+
+                DropdownMenu(
+                    toggle = {
+                        Icon(
+                            imageVector = Icons.Outlined.Brush,
+                            modifier = Modifier
+                                .clickable { showMenu.value = true }
+                                .padding(horizontal = 12.dp, vertical = 16.dp)
+                                .preferredHeight(24.dp)
+                        )
+                    },
+                    expanded = showMenu.value,
+                    onDismissRequest = { showMenu.value = false }
+                ) {
+                    OverrideColor.values().forEach { color ->
+                        DropdownMenuItem(
+                            onClick = {
+                                onAccentColorSelected(color)
+                                // close the menu
+                                showMenu.value = false
+                            }
+                        ) {
+                            Text(text = color.title)
+                        }
+                    }
+                }
             }
         }
     )
@@ -148,6 +117,10 @@ fun ConversationPreview() {
 @Composable
 fun channelBarPrev() {
     JetchatTheme {
-        ConversationAppBar(title = "Ali Connors", contactPhoto = R.drawable.ali)
+        ConversationAppBar(
+            title = "Ali Connors",
+            contactPhoto = R.drawable.ali,
+            onAccentColorSelected = {},
+        )
     }
 }

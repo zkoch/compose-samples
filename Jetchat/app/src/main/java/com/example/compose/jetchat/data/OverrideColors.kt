@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package com.example.compose.jetchat.conversation
+package com.example.compose.jetchat.data
 
-import androidx.annotation.DrawableRes
-import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 
-@Immutable
-data class ConversationUiState(
-    val contactName: String,
-    @DrawableRes val contactPhoto: Int?,
-    val messages: List<Message>,
-)
-
-@Immutable
-data class Message(
-    val author: String,
-    val isMe: Boolean,
-    val content: String,
-    val timestamp: String,
-    val image: Int? = null
-)
+enum class OverrideColor(
+    val title: String,
+    val color: Color,
+    val onColor: Color = if (color.luminance() > 0.5) Color.Black else Color.White
+) {
+    NONE("Default", Color.Transparent),
+    // TODO: use nicer colors
+    BLUE("Blue", Color.Blue),
+    YELLOW("Yellow", Color.Yellow),
+    GREEN("Green", Color.Green)
+}

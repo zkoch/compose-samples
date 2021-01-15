@@ -24,7 +24,7 @@ private val initialMessages = listOf(
     Message(
         "me",
         isMe = true,
-        "Compose newbie: I’ve scourged the internet for tutorials about async data loading " +
+        "Compose newbie: I’ve scoured the internet for tutorials about async data loading " +
             "but haven’t found any good ones. What’s the recommended way to load async " +
             "data and emit composable widgets?",
         "8:03 PM"
@@ -66,7 +66,7 @@ private val initialMessages = listOf(
 )
 
 val exampleUiState = ConversationUiState(
-    initialMessages = initialMessages,
     contactName = "Ali Conors",
     contactPhoto = R.drawable.ali,
+    messages = initialMessages.reversed(),
 )

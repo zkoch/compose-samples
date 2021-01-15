@@ -38,11 +38,10 @@ fun Message(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier) {
-
         Surface(
             color = when {
                 isUserMe -> MaterialTheme.colors.surface
-                else -> MaterialTheme.colors.secondaryVariant
+                else -> MaterialTheme.colors.secondary
             },
             shape = MaterialTheme.shapes.medium,
             elevation = 1.dp,
