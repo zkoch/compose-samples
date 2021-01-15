@@ -16,12 +16,14 @@
 
 package com.example.compose.jetchat.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
@@ -29,8 +31,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose.jetchat.R
@@ -42,6 +46,7 @@ fun JetchatAppBar(
     modifier: Modifier = Modifier,
     onNavIconPressed: () -> Unit = { },
     title: @Composable RowScope.() -> Unit,
+    @DrawableRes iconDrawable: Int,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     // This bar is translucent but elevation overlays are not applied to translucent colors.
@@ -63,10 +68,13 @@ fun JetchatAppBar(
             title = { Row { title() } }, // https://issuetracker.google.com/168793068
             navigationIcon = {
                 Image(
-                    imageVector = vectorResource(id = R.drawable.ic_jetchat),
+                    bitmap = imageResource(iconDrawable),
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .clickable(onClick = onNavIconPressed)
                         .padding(horizontal = 16.dp)
+                        .clickable(onClick = onNavIconPressed)
+                        .aspectRatio(1f)
+                        .clip(MaterialTheme.shapes.small)
                 )
             }
         )
@@ -78,7 +86,10 @@ fun JetchatAppBar(
 @Composable
 fun JetchatAppBarPreview() {
     JetchatTheme {
-        JetchatAppBar(title = { Text("Preview!") })
+        JetchatAppBar(
+            title = { Text("Preview!") },
+            iconDrawable = R.drawable.ali,
+        )
     }
 }
 
@@ -86,6 +97,9 @@ fun JetchatAppBarPreview() {
 @Composable
 fun JetchatAppBarPreviewDark() {
     JetchatTheme(isDarkTheme = true) {
-        JetchatAppBar(title = { Text("Preview!") })
+        JetchatAppBar(
+            title = { Text("Preview!") },
+            iconDrawable = R.drawable.ali,
+        )
     }
 }

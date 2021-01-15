@@ -26,21 +26,14 @@ import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
-import com.example.compose.jetchat.MainViewModel
-import com.example.compose.jetchat.R
 import com.example.compose.jetchat.theme.JetchatTheme
 import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
 import dev.chrisbanes.accompanist.insets.ExperimentalAnimatedInsets
 import dev.chrisbanes.accompanist.insets.ViewWindowInsetObserver
 
 class ConversationFragment : Fragment() {
-
-    private val activityViewModel: MainViewModel by activityViewModels()
 
     private val conversationViewModel: ConversationViewModel by viewModels()
 
@@ -62,26 +55,13 @@ class ConversationFragment : Fragment() {
             .start(windowInsetsAnimationsEnabled = true)
 
         setContent {
-            Providers(
-                AmbientBackPressedDispatcher provides requireActivity().onBackPressedDispatcher,
-                AmbientWindowInsets provides windowInsets,
-            ) {
+            Providers(AmbientWindowInsets provides windowInsets) {
                 JetchatTheme {
                     val uiState by conversationViewModel.uiState.collectAsState()
 
                     ConversationContent(
                         uiState = uiState,
-                        navigateToProfile = { user ->
-                            // Click callback
-                            val bundle = bundleOf("userId" to user)
-                            findNavController().navigate(
-                                R.id.nav_profile,
-                                bundle
-                            )
-                        },
-                        onNavIconPressed = {
-                            activityViewModel.openDrawer()
-                        }
+                        onNavIconPressed = {}
                     )
                 }
             }

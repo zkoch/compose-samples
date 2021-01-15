@@ -16,12 +16,13 @@
 
 package com.example.compose.jetchat.conversation
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.mutableStateListOf
 
 class ConversationUiState(
-    val channelName: String,
-    val channelMembers: Int,
+    val contactName: String,
+    @DrawableRes val contactPhoto: Int?,
     initialMessages: List<Message>
 ) {
     private val _messages: MutableList<Message> =
@@ -36,6 +37,7 @@ class ConversationUiState(
 @Immutable
 data class Message(
     val author: String,
+    val isMe: Boolean,
     val content: String,
     val timestamp: String,
     val image: Int? = null

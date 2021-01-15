@@ -17,27 +17,15 @@
 package com.example.compose.jetchat
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.platform.setContent
-import androidx.compose.ui.viewinterop.AndroidViewBinding
-import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
-import androidx.navigation.findNavController
-import com.example.compose.jetchat.components.JetchatScaffold
-import com.example.compose.jetchat.conversation.AmbientBackPressedDispatcher
-import com.example.compose.jetchat.conversation.BackPressHandler
-import com.example.compose.jetchat.databinding.ContentMainBinding
-import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
+import androidx.fragment.app.commit
+import com.example.compose.jetchat.conversation.ConversationFragment
 
 /**
  * Main activity for the app.
  */
 class NavActivity : AppCompatActivity() {
-    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,52 +34,8 @@ class NavActivity : AppCompatActivity() {
         // including IME animations
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        setContent {
-            // Provide WindowInsets to our content. We don't want to consume them, so that
-            // they keep being pass down the view hierarchy (since we're using fragments).
-            ProvideWindowInsets(consumeWindowInsets = false) {
-                Providers(AmbientBackPressedDispatcher provides this.onBackPressedDispatcher) {
-                    val scaffoldState = rememberScaffoldState()
-
-                    val openDrawerEvent = viewModel.drawerShouldBeOpened.observeAsState()
-                    if (openDrawerEvent.value == true) {
-                        // Open drawer and reset state in VM.
-                        scaffoldState.drawerState.open {
-                            viewModel.resetOpenDrawerAction()
-                        }
-                    }
-
-                    // Intercepts back navigation when the drawer is open
-                    if (scaffoldState.drawerState.isOpen) {
-                        BackPressHandler { scaffoldState.drawerState.close() }
-                    }
-
-                    JetchatScaffold(
-                        scaffoldState,
-                        onChatClicked = {
-                            findNavController(R.id.nav_host_fragment)
-                                .popBackStack(R.id.nav_home, true)
-                            scaffoldState.drawerState.close()
-                        },
-                        onProfileClicked = {
-                            val bundle = bundleOf("userId" to it)
-                            findNavController(R.id.nav_host_fragment).navigate(
-                                R.id.nav_profile,
-                                bundle
-                            )
-                            scaffoldState.drawerState.close()
-                        }
-                    ) {
-                        // Inflate the XML layout using View Binding:
-                        AndroidViewBinding(ContentMainBinding::inflate)
-                    }
-                }
-            }
+        supportFragmentManager.commit {
+            replace(android.R.id.content, ConversationFragment())
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }
