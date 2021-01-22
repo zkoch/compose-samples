@@ -28,8 +28,8 @@ class ConversationViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(exampleUiState)
     val uiState = _uiState.asStateFlow()
 
-    fun sendMessage(message: Message) {
-        addMessage(message)
+    fun sendMessage(message: String) {
+        addMessage(Message("Me", isMe = true, message, "Now"))
 
         viewModelScope.launch {
             delay(2000)

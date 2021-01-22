@@ -30,11 +30,12 @@ import com.example.compose.jetchat.theme.JetchatTheme
 @Preview
 @Composable
 fun PreviewMessages() {
-    JetchatTheme(isDarkTheme = true) {
+    JetchatTheme(isDarkTheme = false) {
         Messages(demoMessages)
     }
 }
 
+@Preview
 @Composable
 fun PreviewMessages_DarkTheme() {
     JetchatTheme(isDarkTheme = true) {
