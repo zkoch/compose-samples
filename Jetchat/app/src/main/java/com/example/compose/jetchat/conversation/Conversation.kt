@@ -18,8 +18,12 @@ package com.example.compose.jetchat.conversation
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.AmbientContentAlpha
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.DropdownMenu
@@ -34,7 +38,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose.jetchat.R
@@ -94,7 +102,16 @@ fun ConversationAppBar(
                                 showMenu.value = false
                             }
                         ) {
-                            Text(text = color.title)
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Spacer(
+                                    Modifier
+                                        .padding(end = 8.dp)
+                                        .preferredSize(16.dp)
+                                        .clip(CircleShape)
+                                        .paint(ColorPainter(color.color))
+                                )
+                                Text(text = color.title)
+                            }
                         }
                     }
                 }
