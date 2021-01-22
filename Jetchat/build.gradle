@@ -69,6 +69,7 @@ subprojects {
             freeCompilerArgs += '-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi'
             freeCompilerArgs += '-Xopt-in=kotlinx.coroutines.FlowPreview'
             freeCompilerArgs += '-Xopt-in=kotlin.Experimental'
+            freeCompilerArgs += '-Xopt-in=androidx.compose.animation.ExperimentalAnimationApi'
             freeCompilerArgs += '-Xallow-jvm-ir-dependencies'
 
             // Set JVM target to 1.8

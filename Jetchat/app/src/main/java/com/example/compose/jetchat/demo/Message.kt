@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-@file:Suppress("UNUSED_PARAMETER")
-
-package com.example.compose.jetchat.conversation
+package com.example.compose.jetchat.demo
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredWidthIn
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
@@ -45,9 +39,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.compose.jetchat.conversation.Message
+import com.example.compose.jetchat.data.demoMessages
+import com.example.compose.jetchat.theme.JetchatTheme
 
-@OptIn(ExperimentalAnimationApi::class)
+@Preview
+@Composable
+fun PreviewMessage_Me() {
+    JetchatTheme {
+        Message(msg = demoMessages[0], isUserMe = true)
+    }
+}
+
+@Preview
+@Composable
+fun PreviewMessage_Other() {
+    JetchatTheme {
+        Message(msg = demoMessages[1], isUserMe = false)
+    }
+}
+
 @Composable
 fun Message(
     msg: Message,
@@ -55,29 +68,26 @@ fun Message(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier) {
-        Surface(
-            color = when {
+        Card(
+            backgroundColor = when {
                 isUserMe -> MaterialTheme.colors.surface
                 else -> MaterialTheme.colors.secondary
             },
-            shape = MaterialTheme.shapes.medium,
-            elevation = 1.dp,
             modifier = Modifier
                 .align(if (isUserMe) Alignment.CenterStart else Alignment.CenterEnd)
                 .preferredWidthIn(max = 280.dp)
         ) {
             var showActions by remember { mutableStateOf(false) }
             Column(
-                modifier = Modifier.clickable {
-                    showActions = !showActions
-                }
+                horizontalAlignment = if (isUserMe) Alignment.Start else Alignment.End,
+                modifier = Modifier
+                    .clickable { showActions = !showActions }
+                    .padding(12.dp)
             ) {
-                Text(
-                    text = msg.content,
-                    modifier = Modifier.padding(8.dp)
-                )
+                Text(text = msg.content)
+
                 AnimatedVisibility(visible = showActions) {
-                    MessageActions(isUserMe)
+                    MessageActions()
                 }
             }
         }
@@ -85,32 +95,8 @@ fun Message(
 }
 
 @Composable
-fun Messages(
-    messages: List<Message>,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        reverseLayout = true,
-        modifier = modifier.fillMaxWidth()
-    ) {
-        items(messages) { message ->
-            Message(
-                msg = message,
-                isUserMe = message.isMe,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun MessageActions(isUserMe: Boolean) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = if (isUserMe) Arrangement.Start else Arrangement.End
-    ) {
+fun MessageActions() {
+    Row {
         IconButton(onClick = { /*TODO*/ }) {
             Icon(Icons.Outlined.ContentCopy)
         }

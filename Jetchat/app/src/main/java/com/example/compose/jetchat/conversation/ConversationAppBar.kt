@@ -43,13 +43,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.compose.jetchat.R
 import com.example.compose.jetchat.components.JetchatAppBar
 import com.example.compose.jetchat.data.OverrideColor
-import com.example.compose.jetchat.data.exampleUiState
-import com.example.compose.jetchat.theme.JetchatTheme
 
 @Composable
 fun ConversationAppBar(
@@ -79,7 +75,6 @@ fun ConversationAppBar(
                         .padding(horizontal = 12.dp, vertical = 16.dp)
                         .preferredHeight(24.dp)
                 )
-                // Info icon
 
                 DropdownMenu(
                     toggle = {
@@ -118,26 +113,4 @@ fun ConversationAppBar(
             }
         }
     )
-}
-
-@Preview
-@Composable
-fun ConversationPreview() {
-    JetchatTheme {
-        ConversationContent(
-            uiState = exampleUiState
-        )
-    }
-}
-
-@Preview
-@Composable
-fun channelBarPrev() {
-    JetchatTheme {
-        ConversationAppBar(
-            title = "Ali Connors",
-            contactPhoto = R.drawable.ali,
-            onAccentColorSelected = {},
-        )
-    }
 }

@@ -20,7 +20,7 @@ import com.example.compose.jetchat.R
 import com.example.compose.jetchat.conversation.ConversationUiState
 import com.example.compose.jetchat.conversation.Message
 
-private val initialMessages = listOf(
+val demoMessages = listOf(
     Message(
         "me",
         isMe = true,
@@ -68,5 +68,5 @@ private val initialMessages = listOf(
 val exampleUiState = ConversationUiState(
     contactName = "Ali Conors",
     contactPhoto = R.drawable.ali,
-    messages = initialMessages.reversed(),
+    messages = demoMessages.reversed(),
 )

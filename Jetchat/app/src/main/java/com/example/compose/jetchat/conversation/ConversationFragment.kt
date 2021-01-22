@@ -22,29 +22,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.compose.jetchat.R
-import com.example.compose.jetchat.data.OverrideColor
-import com.example.compose.jetchat.theme.JetchatTheme
+import com.example.compose.jetchat.demo.ConversationContent
 import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
 import dev.chrisbanes.accompanist.insets.ExperimentalAnimatedInsets
 import dev.chrisbanes.accompanist.insets.ViewWindowInsetObserver
-import dev.chrisbanes.accompanist.insets.navigationBarsWithImePadding
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 class ConversationFragment : Fragment() {
     private val conversationViewModel: ConversationViewModel by viewModels()
@@ -74,57 +61,6 @@ class ConversationFragment : Fragment() {
                     onMessageSend = { message ->
                         conversationViewModel.sendMessage(message)
                     }
-                )
-            }
-        }
-    }
-}
-
-/**
- * Entry point for a conversation screen.
- *
- * @param uiState [ConversationUiState] that contains messages to display
- * @param navigateToProfile User action when navigation to a profile is requested
- * @param modifier [Modifier] to apply to this layout node
- * @param onNavIconPressed Sends an event up when the user clicks on the menu
- */
-@Composable
-fun ConversationContent(
-    uiState: ConversationUiState,
-    modifier: Modifier = Modifier,
-    onMessageSend: ((Message) -> Unit)? = null,
-) {
-    var overrideAccent by remember { mutableStateOf(OverrideColor.NONE) }
-
-    JetchatTheme(overrideAccent = overrideAccent) {
-        val authorMe = stringResource(R.string.author_me)
-        val timeNow = stringResource(R.string.now)
-
-        Surface(modifier = modifier) {
-            Column(Modifier.fillMaxSize()) {
-                // Channel name bar floats above the messages
-                ConversationAppBar(
-                    title = uiState.contactName,
-                    contactPhoto = uiState.contactPhoto ?: 0,
-                    // Use statusBarsPadding() to move the app bar content below the status bar
-                    onAccentColorSelected = {
-                        overrideAccent = it
-                    },
-                    modifier = Modifier.statusBarsPadding(),
-                )
-
-                Messages(
-                    messages = uiState.messages,
-                    modifier = Modifier.weight(1f),
-                )
-
-                UserInput(
-                    onMessageSent = { content ->
-                        onMessageSend?.invoke(Message(authorMe, isMe = true, content, timeNow))
-                    },
-                    // Use navigationBarsWithImePadding(), to move the input panel above both the
-                    // navigation bar, and on-screen keyboard (IME)
-                    modifier = Modifier.navigationBarsWithImePadding(),
                 )
             }
         }
