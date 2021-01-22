@@ -21,7 +21,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,7 +36,6 @@ import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AmbientContentAlpha
@@ -113,14 +111,13 @@ enum class EmojiStickerSelector {
 @Preview
 @Composable
 fun UserInputPreview() {
-    UserInput(onMessageSent = {}, scrollState = rememberScrollState())
+    UserInput(onMessageSent = {})
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UserInput(
     onMessageSent: (String) -> Unit,
-    scrollState: ScrollState,
     modifier: Modifier = Modifier,
 ) {
     var currentInputSelector by savedInstanceState { InputSelector.NONE }
@@ -142,7 +139,6 @@ fun UserInput(
             onTextFieldFocused = { focused ->
                 if (focused) {
                     currentInputSelector = InputSelector.NONE
-                    scrollState.smoothScrollTo(0f)
                 }
                 textFieldFocusState = focused
             },
@@ -155,8 +151,6 @@ fun UserInput(
                 onMessageSent(textState.text)
                 // Reset text field and close keyboard
                 textState = TextFieldValue()
-                // Move scroll to bottom
-                scrollState.smoothScrollTo(0f)
                 dismissKeyboard()
             },
             currentInputSelector = currentInputSelector

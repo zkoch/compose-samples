@@ -20,7 +20,6 @@ package com.example.compose.jetchat.conversation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,23 +47,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-@ExperimentalAnimationApi
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Message(
     msg: Message,
     isUserMe: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val chatColor by animateAsState(
-        when {
-            isUserMe -> MaterialTheme.colors.surface
-            else -> MaterialTheme.colors.secondary
-        }
-    )
-
     Box(modifier) {
         Surface(
-            color = chatColor,
+            color = when {
+                isUserMe -> MaterialTheme.colors.surface
+                else -> MaterialTheme.colors.secondary
+            },
             shape = MaterialTheme.shapes.medium,
             elevation = 1.dp,
             modifier = Modifier
@@ -89,7 +84,6 @@ fun Message(
     }
 }
 
-@ExperimentalAnimationApi
 @Composable
 fun Messages(
     messages: List<Message>,

@@ -24,7 +24,6 @@ import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
@@ -95,13 +94,12 @@ fun ConversationContent(
     modifier: Modifier = Modifier,
     onMessageSend: ((Message) -> Unit)? = null,
 ) {
-    var themeOverrideColor by remember { mutableStateOf<OverrideColor?>(null) }
+    var overrideAccent by remember { mutableStateOf(OverrideColor.NONE) }
 
-    JetchatTheme(overrideAccent = themeOverrideColor) {
+    JetchatTheme(overrideAccent = overrideAccent) {
         val authorMe = stringResource(R.string.author_me)
         val timeNow = stringResource(R.string.now)
 
-        val scrollState = rememberScrollState()
         Surface(modifier = modifier) {
             Column(Modifier.fillMaxSize()) {
                 // Channel name bar floats above the messages
@@ -109,8 +107,8 @@ fun ConversationContent(
                     title = uiState.contactName,
                     contactPhoto = uiState.contactPhoto ?: 0,
                     // Use statusBarsPadding() to move the app bar content below the status bar
-                    onAccentColorSelected = { overrideColor ->
-                        themeOverrideColor = overrideColor
+                    onAccentColorSelected = {
+                        overrideAccent = it
                     },
                     modifier = Modifier.statusBarsPadding(),
                 )
@@ -124,7 +122,6 @@ fun ConversationContent(
                     onMessageSent = { content ->
                         onMessageSend?.invoke(Message(authorMe, isMe = true, content, timeNow))
                     },
-                    scrollState = scrollState,
                     // Use navigationBarsWithImePadding(), to move the input panel above both the
                     // navigation bar, and on-screen keyboard (IME)
                     modifier = Modifier.navigationBarsWithImePadding(),

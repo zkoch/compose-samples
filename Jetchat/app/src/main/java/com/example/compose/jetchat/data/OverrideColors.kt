@@ -24,9 +24,10 @@ enum class OverrideColor(
     val color: Color,
     val onColor: Color = if (color.luminance() > 0.5) Color.Black else Color.White
 ) {
-    NONE("Default", Color.Transparent),
+    NONE("Default", Color.Unspecified),
     // TODO: use nicer colors
-    BLUE("Blue", Color.Blue),
-    YELLOW("Yellow", Color.Yellow),
-    GREEN("Green", Color.Green)
+    PINK("Pink", Color(0xFFd81b60)),
+    ORANGE("Orange", Color(0xFFff6f00)),
+    BLUE("Blue", Color(0xFF1565c0)),
+    GREEN("Green", Color(0xFF7cb342))
 }

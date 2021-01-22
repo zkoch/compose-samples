@@ -16,6 +16,7 @@
 
 package com.example.compose.jetchat.theme
 
+import androidx.compose.animation.animateAsState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
@@ -65,18 +66,25 @@ private val JetchatLightPalette = lightColors(
 @Composable
 fun JetchatTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
-    overrideAccent: OverrideColor? = null,
+    overrideAccent: OverrideColor = OverrideColor.NONE,
     content: @Composable () -> Unit
 ) {
     // We start off with our base colors
-    var colors = if (isDarkTheme) JetchatDarkPalette else JetchatLightPalette
+    val baseColors = if (isDarkTheme) JetchatDarkPalette else JetchatLightPalette
 
-    if (overrideAccent != null && overrideAccent != OverrideColor.NONE) {
-        colors = colors.copy(
-            secondary = overrideAccent.color,
-            onSecondary = overrideAccent.onColor
-        )
+    val secondary = when (overrideAccent) {
+        OverrideColor.NONE -> baseColors.secondary
+        else -> overrideAccent.color
     }
+    val onSecondary = when (overrideAccent) {
+        OverrideColor.NONE -> baseColors.onSecondary
+        else -> overrideAccent.onColor
+    }
+
+    val colors = baseColors.copy(
+        secondary = animateAsState(secondary).value,
+        onSecondary = animateAsState(onSecondary).value
+    )
 
     MaterialTheme(
         colors = colors,
