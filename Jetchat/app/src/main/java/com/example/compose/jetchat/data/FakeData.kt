@@ -67,5 +67,5 @@ val demoMessages = listOf(
 val exampleUiState = ConversationUiState(
     contactName = "Ali Conors",
     contactPhoto = R.drawable.ali,
-    messages = demoMessages.reversed(),
+    messages = demoMessages,
 )
