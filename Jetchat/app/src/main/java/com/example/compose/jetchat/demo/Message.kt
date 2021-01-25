@@ -98,13 +98,13 @@ fun Message(
 fun MessageActions() {
     Row {
         IconButton(onClick = { /*TODO*/ }) {
-            Icon(Icons.Outlined.ContentCopy)
+            Icon(Icons.Outlined.ContentCopy, contentDescription = "Copy message")
         }
         IconButton(onClick = { /*TODO*/ }) {
-            Icon(Icons.Outlined.Share)
+            Icon(Icons.Outlined.Share, contentDescription = "Share")
         }
         IconButton(onClick = { /*TODO*/ }) {
-            Icon(Icons.Outlined.InsertEmoticon)
+            Icon(Icons.Outlined.InsertEmoticon, contentDescription = "Insert emoji")
         }
     }
 }

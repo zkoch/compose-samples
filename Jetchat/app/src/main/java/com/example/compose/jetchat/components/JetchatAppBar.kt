@@ -69,6 +69,7 @@ fun JetchatAppBar(
             navigationIcon = {
                 Image(
                     bitmap = imageResource(iconDrawable),
+                    contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)

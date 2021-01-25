@@ -58,10 +58,11 @@ import androidx.compose.material.icons.outlined.InsertPhoto
 import androidx.compose.material.icons.outlined.Mood
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Providers
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.runtime.setValue
@@ -188,7 +189,7 @@ private fun SelectorExpanded(
     // Request focus to force the TextField to lose it
     val focusRequester = FocusRequester()
     // If the selector is shown, always request focus to trigger a TextField.onFocusChange.
-    onCommit {
+    SideEffect {
         if (currentSelector == InputSelector.EMOJI) {
             focusRequester.requestFocus()
         }
@@ -212,7 +213,9 @@ private fun SelectorExpanded(
 fun FunctionalityNotAvailablePanel() {
     AnimatedVisibility(visible = true, initiallyVisible = false, enter = fadeIn()) {
         Column(
-            modifier = Modifier.preferredHeight(320.dp).fillMaxWidth(),
+            modifier = Modifier
+                .preferredHeight(320.dp)
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -339,8 +342,11 @@ private fun InputSelectorButton(
             val tint = if (selected) MaterialTheme.colors.primary else AmbientContentColor.current
             Icon(
                 icon,
+                contentDescription = null,
                 tint = tint,
-                modifier = Modifier.padding(12.dp).preferredSize(20.dp)
+                modifier = Modifier
+                    .padding(12.dp)
+                    .preferredSize(20.dp)
             )
         }
     }
@@ -368,10 +374,14 @@ private fun UserInputText(
     var keyboardController by remember { mutableStateOf<SoftwareKeyboardController?>(null) }
 
     // Show or hide the keyboard
-    onCommit(keyboardController, keyboardShown) { // Guard side-effects against failed commits
+    DisposableEffect(
+        keyboardController,
+        keyboardShown
+    ) { // Guard side-effects against failed commits
         keyboardController?.let {
             if (keyboardShown) it.showSoftwareKeyboard() else it.hideSoftwareKeyboard()
         }
+        onDispose {}
     }
 
     val a11ylabel = stringResource(id = R.string.textfield_desc)
@@ -387,7 +397,10 @@ private fun UserInputText(
     ) {
         Surface {
             Box(
-                modifier = Modifier.preferredHeight(48.dp).weight(1f).align(Alignment.Bottom)
+                modifier = Modifier
+                    .preferredHeight(48.dp)
+                    .weight(1f)
+                    .align(Alignment.Bottom)
             ) {
                 var lastFocusState by remember { mutableStateOf(FocusState.Inactive) }
                 BasicTextField(
@@ -444,7 +457,11 @@ fun EmojiSelector(
             .focusModifier()
             .semantics { contentDescription = a11yLabel }
     ) {
-        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
+        ) {
             ExtendedSelectorInnerButton(
                 text = stringResource(id = R.string.emojis_label),
                 onClick = { selected = EmojiStickerSelector.EMOJI },
@@ -458,6 +475,7 @@ fun EmojiSelector(
                 modifier = Modifier.weight(1f)
             )
         }
+        @Suppress("DEPRECATION")
         ScrollableRow {
             EmojiTable(onTextAdded, modifier = Modifier.padding(8.dp))
         }

@@ -70,6 +70,7 @@ fun ConversationAppBar(
                 // Search icon
                 Icon(
                     imageVector = Icons.Outlined.Search,
+                    contentDescription = null,
                     modifier = Modifier
                         .clickable(onClick = {}) // TODO: Show not implemented dialog.
                         .padding(horizontal = 12.dp, vertical = 16.dp)
@@ -80,6 +81,7 @@ fun ConversationAppBar(
                     toggle = {
                         Icon(
                             imageVector = Icons.Outlined.Brush,
+                            contentDescription = null,
                             modifier = Modifier
                                 .clickable { showMenu.value = true }
                                 .padding(horizontal = 12.dp, vertical = 16.dp)
