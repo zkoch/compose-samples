@@ -32,7 +32,7 @@ import com.example.compose.jetchat.theme.JetchatTheme
 
 @Preview
 @Composable
-fun PreviewMessages() {
+fun PreviewMessages_LightTheme() {
     JetchatTheme(isDarkTheme = false) {
         Messages(demoMessages)
     }
@@ -53,16 +53,31 @@ fun Messages(
 ) {
     LazyColumn(modifier = modifier) {
         items(messages) { message ->
-            Box(Modifier.fillParentMaxWidth()) {
-                Message(
-                    message = message,
-                    isFromMe = message.isMe,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 4.dp)
-                        .preferredWidthIn(max = 280.dp)
-                        .align(if (message.isMe) Alignment.CenterEnd else Alignment.CenterStart)
-                )
-            }
+            MessageItem(
+                message = message,
+                modifier = Modifier.fillParentMaxWidth()
+            )
         }
+    }
+}
+
+/**
+ * Small wrapper around [Message] which floats it left/right based on the sender,
+ * and adds some spacing.
+ */
+@Composable
+private fun MessageItem(
+    message: Message,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier) {
+        Message(
+            message = message,
+            isFromMe = message.isMe,
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+                .preferredWidthIn(max = 280.dp)
+                .align(if (message.isMe) Alignment.CenterEnd else Alignment.CenterStart)
+        )
     }
 }
