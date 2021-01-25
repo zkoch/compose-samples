@@ -51,10 +51,7 @@ fun Messages(
     messages: List<Message>,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        reverseLayout = true,
-        modifier = modifier
-    ) {
+    LazyColumn(modifier = modifier) {
         items(messages) { message ->
             Box(Modifier.fillParentMaxWidth()) {
                 Message(

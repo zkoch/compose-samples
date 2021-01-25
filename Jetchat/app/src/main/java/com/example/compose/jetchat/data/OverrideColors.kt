@@ -17,7 +17,6 @@
 package com.example.compose.jetchat.data
 
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
 
 enum class OverrideColor(
     val title: String,
