@@ -18,11 +18,9 @@ package com.example.compose.jetchat.demo
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredWidthIn
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -37,7 +35,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,7 +46,7 @@ import com.example.compose.jetchat.theme.JetchatTheme
 @Composable
 fun PreviewMessage_Me() {
     JetchatTheme {
-        Message(msg = demoMessages[0], isUserMe = true)
+        Message(message = demoMessages[0], isFromMe = true)
     }
 }
 
@@ -57,38 +54,33 @@ fun PreviewMessage_Me() {
 @Composable
 fun PreviewMessage_Other() {
     JetchatTheme {
-        Message(msg = demoMessages[1], isUserMe = false)
+        Message(message = demoMessages[1], isFromMe = false)
     }
 }
 
 @Composable
 fun Message(
-    msg: Message,
-    isUserMe: Boolean,
+    message: Message,
+    isFromMe: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier) {
-        Card(
-            backgroundColor = when {
-                isUserMe -> MaterialTheme.colors.surface
-                else -> MaterialTheme.colors.secondary
-            },
+    Card(
+        modifier = modifier,
+        backgroundColor = when {
+            isFromMe -> MaterialTheme.colors.surface
+            else -> MaterialTheme.colors.secondary
+        },
+    ) {
+        var showActions by remember { mutableStateOf(false) }
+        Column(
             modifier = Modifier
-                .align(if (isUserMe) Alignment.CenterStart else Alignment.CenterEnd)
-                .preferredWidthIn(max = 280.dp)
+                .clickable { showActions = !showActions }
+                .padding(12.dp)
         ) {
-            var showActions by remember { mutableStateOf(false) }
-            Column(
-                horizontalAlignment = if (isUserMe) Alignment.Start else Alignment.End,
-                modifier = Modifier
-                    .clickable { showActions = !showActions }
-                    .padding(12.dp)
-            ) {
-                Text(text = msg.content)
+            Text(text = message.content)
 
-                AnimatedVisibility(visible = showActions) {
-                    MessageActions()
-                }
+            AnimatedVisibility(visible = showActions) {
+                MessageActions()
             }
         }
     }

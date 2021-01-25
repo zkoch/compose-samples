@@ -23,7 +23,7 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.example.compose.jetchat.data.OverrideColor
+import androidx.compose.ui.graphics.luminance
 
 private val Yellow400 = Color(0xFFF6E547)
 private val Yellow600 = Color(0xFFF5CF1B)
@@ -66,20 +66,14 @@ private val JetchatLightPalette = lightColors(
 @Composable
 fun JetchatTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
-    overrideAccent: OverrideColor = OverrideColor.NONE,
+    overrideSecondary: Color? = null,
     content: @Composable () -> Unit
 ) {
     // We start off with our base colors
     val baseColors = if (isDarkTheme) JetchatDarkPalette else JetchatLightPalette
 
-    val secondary = when (overrideAccent) {
-        OverrideColor.NONE -> baseColors.secondary
-        else -> overrideAccent.color
-    }
-    val onSecondary = when (overrideAccent) {
-        OverrideColor.NONE -> baseColors.onSecondary
-        else -> overrideAccent.onColor
-    }
+    val secondary = overrideSecondary ?: baseColors.secondary
+    val onSecondary = overrideSecondary?.calculateOnColor() ?: baseColors.onSecondary
 
     val colors = baseColors.copy(
         secondary = animateColorAsState(secondary).value,
@@ -92,4 +86,8 @@ fun JetchatTheme(
         shapes = JetchatShapes,
         content = content
     )
+}
+
+private fun Color.calculateOnColor(): Color {
+    return if (luminance() > 0.5) Color.Black else Color.White
 }

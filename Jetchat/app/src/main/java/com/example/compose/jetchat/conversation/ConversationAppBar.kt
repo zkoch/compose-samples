@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.unit.dp
 import com.example.compose.jetchat.components.JetchatAppBar
@@ -51,7 +52,7 @@ import com.example.compose.jetchat.data.OverrideColor
 fun ConversationAppBar(
     title: String,
     @DrawableRes contactPhoto: Int,
-    onAccentColorSelected: (OverrideColor) -> Unit,
+    onAccentColorSelected: (Color?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val showMenu = remember { mutableStateOf(false) }
@@ -94,7 +95,7 @@ fun ConversationAppBar(
                     OverrideColor.values().forEach { color ->
                         DropdownMenuItem(
                             onClick = {
-                                onAccentColorSelected(color)
+                                onAccentColorSelected(color.color)
                                 // close the menu
                                 showMenu.value = false
                             }
@@ -105,7 +106,7 @@ fun ConversationAppBar(
                                         .padding(end = 8.dp)
                                         .preferredSize(16.dp)
                                         .clip(CircleShape)
-                                        .paint(ColorPainter(color.color))
+                                        .paint(ColorPainter(color.color ?: Color.Transparent))
                                 )
                                 Text(text = color.title)
                             }

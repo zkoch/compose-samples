@@ -17,6 +17,7 @@
 package com.example.compose.jetchat.demo
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,23 +26,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.viewModel
 import com.example.compose.jetchat.conversation.ConversationAppBar
 import com.example.compose.jetchat.conversation.ConversationUiState
 import com.example.compose.jetchat.conversation.ConversationViewModel
 import com.example.compose.jetchat.conversation.UserInput
-import com.example.compose.jetchat.data.OverrideColor
 import com.example.compose.jetchat.data.exampleUiState
 import com.example.compose.jetchat.theme.JetchatTheme
+import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsWithImePadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 @Composable
 fun Conversation() {
-    var overrideAccent by remember { mutableStateOf(OverrideColor.NONE) }
+    var overrideThemeSecondary by remember { mutableStateOf<Color?>(null) }
 
-    JetchatTheme(overrideAccent = overrideAccent) {
+    JetchatTheme(overrideSecondary = overrideThemeSecondary) {
         val viewModel: ConversationViewModel = viewModel()
 
         val uiState by viewModel.uiState.collectAsState()
@@ -52,7 +54,7 @@ fun Conversation() {
                 viewModel.sendMessage(message)
             },
             onOverrideColorChanged = { color ->
-                overrideAccent = color
+                overrideThemeSecondary = color
             }
         )
     }
@@ -61,7 +63,7 @@ fun Conversation() {
 @Composable
 private fun ConversationContent(
     uiState: ConversationUiState,
-    onOverrideColorChanged: (OverrideColor) -> Unit,
+    onOverrideColorChanged: (Color?) -> Unit,
     onMessageSent: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -77,7 +79,9 @@ private fun ConversationContent(
 
             Messages(
                 messages = uiState.messages,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
             )
 
             UserInput(
@@ -93,11 +97,13 @@ private fun ConversationContent(
 @Preview
 @Composable
 fun ConversationPreview() {
-    JetchatTheme {
-        ConversationContent(
-            uiState = exampleUiState,
-            onMessageSent = {},
-            onOverrideColorChanged = {},
-        )
+    ProvideWindowInsets {
+        JetchatTheme {
+            ConversationContent(
+                uiState = exampleUiState,
+                onMessageSent = {},
+                onOverrideColorChanged = {},
+            )
+        }
     }
 }

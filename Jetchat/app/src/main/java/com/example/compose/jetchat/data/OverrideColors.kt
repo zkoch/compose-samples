@@ -21,10 +21,9 @@ import androidx.compose.ui.graphics.luminance
 
 enum class OverrideColor(
     val title: String,
-    val color: Color,
-    val onColor: Color = if (color.luminance() > 0.5) Color.Black else Color.White
+    val color: Color?
 ) {
-    NONE("Default", Color.Unspecified),
+    NONE("Default", null),
     // TODO: use nicer colors
     PINK("Pink", Color(0xFFd81b60)),
     ORANGE("Orange", Color(0xFFff6f00)),

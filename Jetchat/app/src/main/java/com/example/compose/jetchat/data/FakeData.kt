@@ -41,7 +41,7 @@ val demoMessages = listOf(
     Message(
         "me",
         isMe = true,
-        "Take a look at the `Flow.collectAsState()` APIs",
+        "Take a look at the Flow.collectAsState() APIs",
         "8:05 PM"
     ),
     Message(
@@ -54,8 +54,7 @@ val demoMessages = listOf(
         "Ali Connors",
         isMe = false,
         "Thank you!",
-        "8:06 PM",
-        R.drawable.sticker
+        "8:06 PM"
     ),
     Message(
         "me",
