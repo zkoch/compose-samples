@@ -100,7 +100,7 @@ fun ConversationPreview() {
     ProvideWindowInsets {
         JetchatTheme {
             ConversationContent(
-                uiState = exampleUiState,
+                uiState = exampleUiState(),
                 onMessageSent = {},
                 onOverrideColorChanged = {},
             )

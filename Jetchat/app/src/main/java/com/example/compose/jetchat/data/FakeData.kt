@@ -19,15 +19,16 @@ package com.example.compose.jetchat.data
 import com.example.compose.jetchat.R
 import com.example.compose.jetchat.conversation.ConversationUiState
 import com.example.compose.jetchat.conversation.Message
+import java.time.ZonedDateTime
 
-val demoMessages = listOf(
+fun demoMessages() = listOf(
     Message(
         "me",
         isMe = true,
         "Compose newbie: I’ve scoured the internet for tutorials about async data loading " +
             "but haven’t found any good ones. What’s the recommended way to load async " +
             "data and emit composable widgets?",
-        "8:03 PM"
+        ZonedDateTime.now().minusDays(2).minusHours(1).minusMinutes(29)
     ),
     Message(
         "Ali Connors",
@@ -36,36 +37,36 @@ val demoMessages = listOf(
             "out of date pretty fast but this sample is always up to date and deals with async " +
             "data loading (it's faked but the same idea applies) \uD83D\uDC49" +
             "https://github.com/android/compose-samples/tree/master/JetNews",
-        "8:04 PM"
+        ZonedDateTime.now().minusDays(1).minusHours(5).minusMinutes(24)
     ),
     Message(
         "me",
         isMe = true,
         "Take a look at the Flow.collectAsState() APIs",
-        "8:05 PM"
+        ZonedDateTime.now().minusDays(1).minusHours(1).minusMinutes(16)
     ),
     Message(
         "me",
         isMe = true,
         "You can use all the same stuff",
-        "8:05 PM"
+        ZonedDateTime.now().minusHours(8).minusMinutes(71)
     ),
     Message(
         "Ali Connors",
         isMe = false,
         "Thank you!",
-        "8:06 PM"
+        ZonedDateTime.now().minusHours(6).minusMinutes(10)
     ),
     Message(
         "me",
         isMe = true,
         "Check it out!",
-        "8:07 PM"
+        ZonedDateTime.now().minusHours(1)
     )
 )
 
-val exampleUiState = ConversationUiState(
+fun exampleUiState() = ConversationUiState(
     contactName = "Ali Conors",
     contactPhoto = R.drawable.ali,
-    messages = demoMessages,
+    messages = demoMessages(),
 )

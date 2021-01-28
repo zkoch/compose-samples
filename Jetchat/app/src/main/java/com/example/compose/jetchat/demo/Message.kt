@@ -46,7 +46,7 @@ import com.example.compose.jetchat.theme.JetchatTheme
 @Composable
 fun PreviewMessage_Me() {
     JetchatTheme {
-        Message(message = demoMessages[0], isFromMe = true)
+        Message(message = demoMessages()[0], isFromMe = true)
     }
 }
 
@@ -54,7 +54,7 @@ fun PreviewMessage_Me() {
 @Composable
 fun PreviewMessage_Other() {
     JetchatTheme {
-        Message(message = demoMessages[1], isFromMe = false)
+        Message(message = demoMessages()[1], isFromMe = false)
     }
 }
 

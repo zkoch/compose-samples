@@ -18,6 +18,10 @@ package com.example.compose.jetchat.conversation
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
+import java.time.Instant
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
+import java.time.temporal.Temporal
 
 @Immutable
 data class ConversationUiState(
@@ -31,6 +35,10 @@ data class Message(
     val author: String,
     val isMe: Boolean,
     val content: String,
-    val timestamp: String,
+    val dateTime: ZonedDateTime,
     val image: Int? = null
 )
+
+fun Temporal.daysSinceEpoch(): Long {
+    return ChronoUnit.DAYS.between(Instant.EPOCH, this)
+}
